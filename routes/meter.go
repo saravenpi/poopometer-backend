@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
@@ -98,6 +99,11 @@ func MeterHandler(c *gin.Context) {
 
 	// Parse the response
 	content := resp.Choices[0].Message.Content
+
+	// Clean the response string by removing markdown formatting
+	content = strings.ReplaceAll(content, "```json", "")
+	content = strings.ReplaceAll(content, "```", "")
+
 	var result Response
 	if err := json.Unmarshal([]byte(content), &result); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"indicator": 42, "comment": "Failed to parse response"})
