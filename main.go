@@ -15,7 +15,7 @@ func main() {
 
 	// Setup CORS
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://poopometer.vercel.app", "http://localhost:3000"},
+		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
 		AllowCredentials: true,
@@ -28,7 +28,7 @@ func main() {
 	// Get port from environment variable or use default
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3003"
+		port = "8080"
 	}
 
 	// Start server
