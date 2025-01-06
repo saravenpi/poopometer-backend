@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"sync"
 	"time"
@@ -100,9 +101,10 @@ func MeterHandler(c *gin.Context) {
 	// Parse the response
 	content := resp.Choices[0].Message.Content
 
-	// Clean the response string by removing markdown formatting
-	content = strings.ReplaceAll(content, "```json", "")
-	content = strings.ReplaceAll(content, "```", "")
+	// Extract content between ```json and ```
+	if matches := regexp.MustCompile("(?s)```json(.*?)```").FindStringSubmatch(content); len(matches) > 1 {
+		content = matches[1]
+	}
 
 	var result Response
 	if err := json.Unmarshal([]byte(content), &result); err != nil {
